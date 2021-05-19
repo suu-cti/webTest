@@ -5,6 +5,9 @@ var classDictionary = {
 	"MATH" : ["https://www.suu.edu/academicsuccess/tutoring/", "Tutoring"],
 	"COMM" : ["https://www.suu.edu/speech-center/", "Speech and Presentation Assistance"]
 }
+console.log("HELLO WOORLD")
+print("HELLO WORLD")
+
 if(window.location.pathname.includes("courses")){
 	var title = document.title.split("-")[0];
 	if(classDictionary[title]){
