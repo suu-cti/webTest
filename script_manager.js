@@ -3,7 +3,7 @@ console.log("Script manager working")
 var scripts = ['third_party_scripts.js', 'buttons.js', 'hide_elements.js']
 for(var i = 0; i < scripts.length; i++){
 	var script = document.createElement("script");
-	script.src = 'https://cdn.jsdelivr.net/gh/suu-otl/webTest@333634a6d048c981291ce295738b1b4f533efc8f/' + scripts[i];
+	script.src = 'https://cdn.jsdelivr.net/gh/suu-otl/webTest@cb51aaa0f32d3c25fb8f875febbff760922ce2f0/' + scripts[i];
 	document.head.appendChild(script);
 }
 
