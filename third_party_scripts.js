@@ -67,3 +67,5 @@ var script = document.createElement('script');
 script.src = `https://chat.trypronto.com/js/embedded.js?cb=${Math.round(new Date().getTime() / 1000)}`;
 document.body.appendChild(script);
 })();
+
+/*EvaluationKIT START*/var evalkit_jshosted = document.createElement('script');evalkit_jshosted.setAttribute('type', 'text/javascript');evalkit_jshosted.setAttribute('src', 'https://suu.evaluationkit.com/CanvasScripts/suu.js?v=1');document.getElementsByTagName('head')[0].appendChild(evalkit_jshosted);/*EvaluationKIT END*/
