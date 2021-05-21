@@ -18,3 +18,7 @@ if(window.location.pathname.includes("courses")){
 if(window.location.pathname.includes("speed_grader")){
 	$(right_side).append('<a class="Button Button--primary Button--block" href="Google.com">Plz work</a> ');
 }
+
+function sayHello(){
+	console.log("Please work you rat bastard")
+}
