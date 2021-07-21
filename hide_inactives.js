@@ -3,18 +3,16 @@ originalTableRows = new Array()
 
 //Entry Point. There is a delay here because the table of students loads in after you've made it to the page
 if(window.location.pathname.includes("courses") && window.location.pathname.includes("users")){
-    console.log("Looping")
     var checkExist = setInterval(function(){
         if(document.getElementsByTagName('table')[0] != undefined){
-            console.log("Found it")
-            hideThings()
+            main()
             clearInterval(checkExist)
         }
     }, 100)
 }
 
 
-function hideThings(){
+function main(){
     console.log("Entering main")
         $('.v-gutter').prepend('<div id ="inactive-users" style="display: inline-block; width: 100%"> </div>')
         $('#inactive-users').prepend('<span style="font-size: 1.3em;"> Show Inactive Users <input id ="'+ checkboxID +'" type = "checkbox" checked> </input> </span>')

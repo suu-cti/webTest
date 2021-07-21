@@ -32,6 +32,7 @@ var allFilesInCourse = {}
 
 
 async function main(){
+    console.log("No I'm Entering my main function poop man")
     $('.ef-actions').prepend('<button class="btn btn-primary btn-scan-files"> Scan files in course </button>')
     $('.ef-directory-header').find('.ef-links-col').before('<span class="ef-occurences-col">Occurrences</span>')
     $('.ef-occurences-col').hide()
