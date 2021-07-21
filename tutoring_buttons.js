@@ -24,20 +24,20 @@ class TutoringButtons{
 
     generateDictionary(){
         //Writing Center
-        wc = ["https://www.suu.edu/writingcenter/", "Tutoring"]
+        var wc = ["https://www.suu.edu/writingcenter/", "Tutoring"]
 
         //Tutoring Center
-        tc = ["https://www.suu.edu/academicsuccess/tutoring/", "Writing"]
+        var tc = ["https://www.suu.edu/academicsuccess/tutoring/", "Writing"]
 
         //Speech and Presentation Center
-        sc = ["https://www.suu.edu/speech-center/", "Speech And Presentaion"]
+        var sc = ["https://www.suu.edu/speech-center/", "Speech And Presentaion"]
 
         //English as a Second Language Center
-        eslc = ["https://www.suu.edu/alcc/resources.html", "English as a Second Language"]
+        var eslc = ["https://www.suu.edu/alcc/resources.html", "English as a Second Language"]
 
 
         
-        classDictionary = {
+        var classDictionary = {
             "ACCT" : [tc],
             "AGSC" : [wc],
             "ANTH" : [wc,sc],
