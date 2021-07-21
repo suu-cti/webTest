@@ -1,11 +1,35 @@
+
+/*
+// JavaScript Document
+var script = document.createElement("script");
+script.type = 'text/javascript';
+script.src = 'https://cdn.jsdelivr.net/gh/suu-otl/webTest@b355e8d50ff1e93512b7b9c32e1169122735f372/script_manager.js';
+document.head.appendChild(script);
+*/
+
+
 //Calls all of the other scripts
-console.log("Script manager working")
-var scripts = ['third_party_scripts.js', 'buttons.js', 'hide_elements.js']
+// console.log("Script manager working")
+var scripts = [ 'assignment_switcher.js', 'buttons.js', 'hide_elements.js', 'knowledge_checks.js',  'third_party_scripts.js', 'tutoring_buttons.js']
 for(var i = 0; i < scripts.length; i++){
 	var script = document.createElement("script");
-	script.src = 'https://cdn.jsdelivr.net/gh/suu-otl/webTest@cb51aaa0f32d3c25fb8f875febbff760922ce2f0/' + scripts[i];
+	script.src = 'https://www.suu.edu/otl/_canvas-files/' + scripts[i];
 	document.head.appendChild(script);
 }
+
+
+
+var script = document.createElement("script")
+script.src = "https://cdn.jsdelivr.net/gh/suu-otl/webTest@688eb9e847b3dda3959ad09800cbe165d6d0b64f/hide_inactives.js"
+document.head.appendChild(script)
+
+
+
+
+var script = document.createElement("script")
+script.src = "https://cdn.jsdelivr.net/gh/suu-otl/webTest@688eb9e847b3dda3959ad09800cbe165d6d0b64f/show_file_use.js"
+document.head.appendChild(script)
+
 
 //* Calendar Customization === This is where a link to the SUU Academic Calendar is located top right on Calendar page.//
 $('#calendar-feed').parent().prepend('<i class="icon-calendar-month"></i> <a href="http://www.google.com/calendar/embed?src=suu.edu_tjl05mhr4lldjqhph0lasfmqk8@group.calendar.google.com&ctz=America/Denver&gsessionid=_lJiWMqvVSpfkVl1KVgY3w/" target="_new">SUU Academic Calendar</a>');

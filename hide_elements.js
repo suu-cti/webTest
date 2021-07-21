@@ -5,7 +5,6 @@
     console.log('Hiding Course Delete and Conclude');
     // THIS WILL HIDE RESET COURSE CONTENT FOR ANYONE NOT AN ADMIN///
     if($.inArray('admin', ENV['current_user_roles']) == -1 ) {
-
         $('a[href$="event=conclude"]').hide();
         $('a[href$="event=delete"]').hide();
     } else{

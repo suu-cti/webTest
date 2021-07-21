@@ -1,29 +1,7 @@
-console.log("Buttons working")
-
 //* Orientation Choices #right-side, .ic-sidebar-logo, .ic-sidebar-logo_image (append)
 $('#right-side').prepend('<a class="Button Button--primary Button--block"  href="https://suu.instructure.com/courses/166813">Students - How To Use Canvas</a><br />');
 
 $('#right-side').prepend('<a class="Button Button--primary Button--block"  href="https://library.suu.edu/distance">Library Resource for <br />Distance Learners</a><br />');
-
-
-//
-///Adds tutoring help buttons to specific classes
-//
-var classDictionary = {
-	//Format
-	//	"Course Type" : ["URL", "Text To Display"]
-	"ENGL" : ["https://www.suu.edu/writingcenter/", "Writing Assistance"],
-	"MATH" : ["https://www.suu.edu/academicsuccess/tutoring/", "Tutoring"],
-	"COMM" : ["https://www.suu.edu/speech-center/", "Speech and Presentation Assistance"]
-}
-
-if(window.location.pathname.includes("courses")){
-	var title = document.title.split("-")[0];
-	if(classDictionary[title]){
-		$('#course_show_secondary').append(`<br /> <a class="Button Button--primary Button--block" href=${classDictionary[title][0]} >${classDictionary[title][1]}</a> `);
-	}
-}
-
 
 //
 ///Adds the Registration Schedule Builder button to only the dashboard.
@@ -32,12 +10,6 @@ if(window.location.pathname == "/"){
 	$('#right-side-wrapper').append('<br /> <a class="Button Button--primary Button--block" style="padding: 0px 0px; border: none;" href="https://suu.collegescheduler.com/"><img src="https://s3-us-west-1.amazonaws.com/mysuu/images/college-scheduler.jpg"></a>');
 }
 
-//
-///Speed Grader stuff
-//
-if(window.location.pathname.includes("speed_grader")){
-	$(right_side).append('<a class="Button Button--primary Button--block" href="Google.com">Plz work</a> ');
-}
 
 
 //Script Originally written by Kenneth Larson and can be found here: https://community.canvaslms.com/t5/Question-Forum/Is-that-possible-to-add-a-quot-My-Media-quot-button-on-Dashboard/td-p/151848/page/2
