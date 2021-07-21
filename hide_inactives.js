@@ -5,7 +5,7 @@ originalTableRows = new Array()
 if(window.location.pathname.includes("courses") && window.location.pathname.includes("users")){
     var checkExist = setInterval(function(){
         if(document.getElementsByTagName('table')[0] != undefined){
-            hide_inactives.main()
+            this.main()
             clearInterval(checkExist)
         }
     }, 100)
