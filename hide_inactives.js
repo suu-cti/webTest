@@ -29,7 +29,7 @@ class HideInactives{
     }
     
     //Behavior for when our checkbox is clicked
-    boxClicked(){
+    static boxClicked(){
         var checked = $('#'+HideInactives.checkboxID).is(":checked")
         if(checked){
             HideInactives.showEntries()
@@ -41,7 +41,7 @@ class HideInactives{
     }
     
     //Removes all students who are inactive and saves them into an array to be inserted back in when the checkbox is ticked
-    removeEntries(){
+    static removeEntries(){
         var table = document.getElementsByTagName('table')[0]
         var rows = table.rows
     
@@ -60,7 +60,7 @@ class HideInactives{
     }
     
     //Recreates our table and shoves all of our original rows inside of it
-    showEntries(){
+    static showEntries(){
         var newTable = document.createElement("table")
         newTable.className = "roster ic-Table ic-Table--hover-row ic-Table--condensed ic-Table--striped"
         $('table').replaceWith(newTable)
