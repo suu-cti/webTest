@@ -20,18 +20,17 @@ class ShowFileUse{
     allFilesInCourse = {}
 
     constructor(){
-        this.main()
-        // if(window.location.pathname.includes('files')){
-        //     var checkExist = setInterval(function(){
-        //         if(document.getElementsByClassName('ef-item-row')[0] != undefined){
-        //             this.main()
-        //             clearInterval(checkExist)
-        //         }
-        //     }, 100)
-        // }
+        if(window.location.pathname.includes('files')){
+            var checkExist = setInterval(function(){
+                if(document.getElementsByClassName('ef-item-row')[0] != undefined){
+                    ShowFileUse.main()
+                    clearInterval(checkExist)
+                }
+            }, 100)
+        }
     }
 
-    main(){
+    static main(){
         console.log("No I'm Entering my main function poop man")
         $('.ef-actions').prepend('<button class="btn btn-primary btn-scan-files"> Scan files in course </button>')
         $('.ef-directory-header').find('.ef-links-col').before('<span class="ef-occurences-col">Occurrences</span>')
