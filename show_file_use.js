@@ -40,7 +40,7 @@ class ShowFileUse{
     
     //Starts Scanning the course
     //Only happens after the user clicks a button on the Files page. Scanning is pretty intensive, so I wanted to make sure only to do it when the user wanted to
-    async clickedButton(){
+    static async clickedButton(){
         console.log("He clik")
     
         //Canvas stores a lot of these things differently, so I'm keeping multiple arrays for each unique way I have to handle these guys
@@ -88,7 +88,7 @@ class ShowFileUse{
     }
     
     //Modules are stored a little differently than the other Page types, so I just put most of the logic here in this method. It reconverges with the standard approach at getFileNamesFromLinks
-    async handleModules(courseID){
+    static async handleModules(courseID){
     
         //Alright, this function is a little dense because we have to query each of the modules, then query for the content inside of them
         var url = "https://suu.instructure.com/api/v1/courses/" + courseID + '/modules'
@@ -114,7 +114,7 @@ class ShowFileUse{
      
     //Calls the API to grab every single file from the course regardless of whether or not it is used. Because it's paginated, we have to do this recursively, which is why this is a little gross
     //Gotta keep making the call until there are no more resources to grab
-    async getFilesFromCourse(url, previousResponse){
+    static async getFilesFromCourse(url, previousResponse){
         files = new Array()
         //Calls API using url and page information
         response = await fetch(url)
@@ -140,7 +140,7 @@ class ShowFileUse{
     
     //Used primarily for Pages. To get the html, we need to query each page individually, so this grabs each of those and puts them into an array to query in getContentFromPage
     //Also uses recursion to handle pagination
-    async getPreliminaryContentFromPage(pageType, url, previousResponse){
+    static async getPreliminaryContentFromPage(pageType, url, previousResponse){
     
         //Stores urls
         var urls = new Array()
@@ -176,7 +176,7 @@ class ShowFileUse{
     
     //Gets the objects for each of the types of "Pages"(assignments, quizzes, discussions, etc)
     //Pagination ruins everything, so this method acts recursively as well
-    async getContentFromPage(location, url, courseID){
+    static async getContentFromPage(location, url, courseID){
         //Calls API using url
     
         response = await fetch(url)
@@ -205,7 +205,7 @@ class ShowFileUse{
     //Gets the HTML content for each of the "Pages"
     //Also converts our api url to the url of the actual "page" we're looking at
     //url is passed to keep track of where the content was found
-    getHTMLFromContent(content, location, url, courseID){
+    static getHTMLFromContent(content, location, url, courseID){
     
         //Extra content in this case basically just refers to the extra garbage that gets sent along with announcements
         url = removeExtraLinkContent(url, courseID)
@@ -231,7 +231,7 @@ class ShowFileUse{
     
     //It says removeLinkContent but this method is pretty much exclusively for dealing with announcements because their api links are really mangled compared to their real links
     //Method essentially just reformats the url to a format that will take you to the correct page when pasted into a browser
-    removeExtraLinkContent(url, courseID){
+    static removeExtraLinkContent(url, courseID){
         if(url.includes('announcements')){
             console.log(url)
             var newURL = url.slice(0,url.indexOf('announcements')) + 'courses/' + courseID + '/discussion_topics'
@@ -245,7 +245,7 @@ class ShowFileUse{
     }
     //Searches the HTML for any links to files in our course
     //pageURL now refers to the actual hyperlink of the "page"
-    getLinksFromHTML(content, pageURL){
+    static getLinksFromHTML(content, pageURL){
         if(content != null){
             var position = content.indexOf('href')
             while(position !== -1){
@@ -263,7 +263,7 @@ class ShowFileUse{
     
     //Searches through the link for the name of our file and saves it and the number of times it has shown up into a dictionary. 
     //idLocation refers to where in the string the fileID is located. Unfortunately, some links have it in different positions, so we need to keep track of this
-    getFileNamesFromLinks(content, position, idLocation, pageURL){
+    static getFileNamesFromLinks(content, position, idLocation, pageURL){
         //Links are formatting like src="linkNameHere.com". This first loop reads through everything on the left hand we don't care about, so we end up with linkNameHere.com"
         while(content.charAt(position) != '"'){
             position++
@@ -297,7 +297,7 @@ class ShowFileUse{
     }
     
     //Returns the ids of each of the files by scraping them from the links
-    getFileIDFromName(link, idLocation){
+    static getFileIDFromName(link, idLocation){
         var tempResult = link.split('/')[idLocation]
         var fileID = ""
         var index = 0
@@ -313,7 +313,7 @@ class ShowFileUse{
     
     //Compares our list of files used by the course and list of all files in the course total and compares them to show us at the end which files are and are not used by the course
     //Also downloads the csv of our data
-    compareAllFilesToFilesUsed(){
+    static compareAllFilesToFilesUsed(){
         //Stores all of the divs so we can insert our data back into the webpage
         htmlItems = $('.ef-item-row').find('.ef-links-col')
         let csvContent = "File Name, Occurrences, Links\n"
@@ -334,7 +334,7 @@ class ShowFileUse{
     
     //Takes the data we already gathered and puts it in a csv friendly format and returns it as a string
     //Takes in the index of which file we're looking at
-    csvContentFromData(index){
+    static csvContentFromData(index){
         if(filesUsedInCourse[allFilesInCourse[index]['id']] != null){
             var tempString =  allFilesInCourse[index]['display_name'] + ',' + filesUsedInCourse[allFilesInCourse[index]['id']]['occurences'] + ',\"'
             
@@ -358,7 +358,7 @@ class ShowFileUse{
     
     //To get all of our modules, we need to specify a date range
     //Method returns the current date
-    getDate(){
+    static getDate(){
         const d = new Date()
         var date = ""
         date += d.getFullYear() + "-"
