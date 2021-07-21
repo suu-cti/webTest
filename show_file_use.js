@@ -56,7 +56,7 @@ class ShowFileUse{
         var url = "https://suu.instructure.com/api/v1/courses/" + courseID + '/pages'
         //Grabs each page from our Pages
         for(var i = 0; i < placesToScrapeViaURL.length; i++){
-            var urls = await getPreliminaryContentFromPage(placesToScrapeViaURL[i], url, new Array())
+            var urls = await ShowFileUse.getPreliminaryContentFromPage(placesToScrapeViaURL[i], url, new Array())
         }
         //Adds each page to list of items to scrape
         for(var i = 0; i < urls.length; i++){
@@ -68,23 +68,23 @@ class ShowFileUse{
         //Grabs content from all of our "Pages"
         for(var i = 0; i < placesToScrapeDirectly.length; i++){
             var url = "https://suu.instructure.com/api/v1/courses/" + courseID + '/' + placesToScrapeDirectly[i][0]
-            await getContentFromPage(placesToScrapeDirectly[i], url, courseID)
+            await ShowFileUse.getContentFromPage(placesToScrapeDirectly[i], url, courseID)
         }
     
         var date = getDate()
         url = "https://suu.instructure.com/api/v1/" + placesToScrapeWithDateInformation[0][0]  + "?" + 'context_codes[]=course_' + window.location.pathname.split('/')[2] +'&start_date=2011-01-01' + '&end_date=' + date
-        await getContentFromPage(placesToScrapeWithDateInformation[0], url, courseID)
+        await ShowFileUse.getContentFromPage(placesToScrapeWithDateInformation[0], url, courseID)
         
     
         //Grabbing all files in the course regardless of whether or not they're used
         var url = "https://suu.instructure.com/api/v1/courses/" + courseID + '/files'
-        allFilesInCourse = await getFilesFromCourse(url, new Array())
+        allFilesInCourse = await ShowFileUse.getFilesFromCourse(url, new Array())
     
-        await handleModules(courseID)
+        await ShowFileUse.handleModules(courseID)
     
         $('.ef-occurences-col').show(200)
         
-        compareAllFilesToFilesUsed()
+        ShowFileUse.compareAllFilesToFilesUsed()
     }
     
     //Modules are stored a little differently than the other Page types, so I just put most of the logic here in this method. It reconverges with the standard approach at getFileNamesFromLinks
@@ -103,7 +103,7 @@ class ShowFileUse{
                     for(var x = 0; x < data.length; x++){
                         if(data[x]['url'] != null){
                             if(data[x]['url'].includes('files')){
-                                getFileNamesFromLinks('"' + data[x]['url'] + '"', 0, 8, url)
+                                ShowFileUse.getFileNamesFromLinks('"' + data[x]['url'] + '"', 0, 8, url)
                             }
                         }
                     }
@@ -125,7 +125,7 @@ class ShowFileUse{
                 for(var i = 1; link[i] != '>' && i < link.length; i++ ){
                     nextUrl += link[i]
                 }
-                previousResponse = await getFilesFromCourse(nextUrl, previousResponse)
+                previousResponse = await ShowFileUse.getFilesFromCourse(nextUrl, previousResponse)
             }
             return response.json()
         })
@@ -157,7 +157,7 @@ class ShowFileUse{
                 for(var i = 1; link[i] != '>' && i < link.length; i++ ){
                     nextUrl += link[i]
                 }
-                previousResponse = await getPreliminaryContentFromPage(pageType, nextUrl, previousResponse)
+                previousResponse = await ShowFileUse.getPreliminaryContentFromPage(pageType, nextUrl, previousResponse)
             }
             return response.json()
         })
@@ -188,7 +188,7 @@ class ShowFileUse{
                     for(var i = 1; link[i] != '>' && i < link.length; i++ ){
                         nextUrl += link[i]
                     }
-                    await getContentFromPage(location, nextUrl)
+                    await ShowFileUse.getContentFromPage(location, nextUrl)
                 }
                 return response.json()
             }
@@ -198,7 +198,7 @@ class ShowFileUse{
         })
         .then(data => {
             if(data != undefined){
-                getHTMLFromContent(data, location, url, courseID)
+                ShowFileUse.getHTMLFromContent(data, location, url, courseID)
             }
         })
     }
@@ -208,12 +208,12 @@ class ShowFileUse{
     static getHTMLFromContent(content, location, url, courseID){
     
         //Extra content in this case basically just refers to the extra garbage that gets sent along with announcements
-        url = removeExtraLinkContent(url, courseID)
+        url = ShowFileUse.removeExtraLinkContent(url, courseID)
     
         //If there is no length, then we don't need to use a loop because we don't have an array (This is here because we have to grab individual pages, which returns a single object instead of an array)
         if(content.length == undefined){
             //We aren't adding the id here like we are below because urls for pages are sent as is and don't need to be edited
-            getLinksFromHTML(content[location[1]], url)
+            ShowFileUse.getLinksFromHTML(content[location[1]], url)
         }
     
         //If we do have an array, we loop through it and grab the html from each object
@@ -221,10 +221,10 @@ class ShowFileUse{
             
             var id = content[i][location[location.length-1]]
             if(content[i][location[1]] == null){
-                getLinksFromHTML(content[i][location[2]], url + '/' + id) 
+                ShowFileUse.getLinksFromHTML(content[i][location[2]], url + '/' + id) 
             }
             else{
-                getLinksFromHTML(content[i][location[1]], url + '/' + id)
+                ShowFileUse.getLinksFromHTML(content[i][location[1]], url + '/' + id)
             }
         }
     }
@@ -249,13 +249,13 @@ class ShowFileUse{
         if(content != null){
             var position = content.indexOf('href')
             while(position !== -1){
-                getFileNamesFromLinks(content, position, 6, pageURL)
+                ShowFileUse.getFileNamesFromLinks(content, position, 6, pageURL)
                 position = content.indexOf('href', position + 1)
             }
         
             position = content.indexOf('src')
             while(position !== -1){
-                getFileNamesFromLinks(content, position,6, pageURL)
+                ShowFileUse.getFileNamesFromLinks(content, position,6, pageURL)
                 position = content.indexOf('src', position+1)
             }
         }
@@ -278,7 +278,7 @@ class ShowFileUse{
         }
         if(tempString.startsWith('https://suu.instructure.com')){
             //Just grabbing the fileID from the link we just got
-            var fileID = getFileIDFromName(tempString, idLocation)
+            var fileID = ShowFileUse.getFileIDFromName(tempString, idLocation)
     
             //When we declare the dictionary, we don't know the types, so the first time we're adding something to the dictionary, we use = and subsequent times we can use += now that we have a set data type
             //I created a dictionary in a dictionary here because for each file, I want to keep track of multiple pieces of data (Occurences of that file in the course and an array of links showing where the file is used)
@@ -318,7 +318,7 @@ class ShowFileUse{
         htmlItems = $('.ef-item-row').find('.ef-links-col')
         let csvContent = "File Name, Occurrences, Links\n"
         for(var i = 0; i < Object.keys(allFilesInCourse).length; i++){
-            csvContent += csvContentFromData(i)
+            csvContent += ShowFileUse.csvContentFromData(i)
         }
     
     
