@@ -23,8 +23,8 @@ class ShowFileUse{
         if(window.location.pathname.includes('files')){
             var checkExist = setInterval(function(){
                 if(document.getElementsByClassName('ef-item-row')[0] != undefined){
-                    ShowFileUse.main()
                     clearInterval(checkExist)
+                    ShowFileUse.main()
                 }
             }, 100)
         }
@@ -35,7 +35,7 @@ class ShowFileUse{
         $('.ef-actions').prepend('<button class="btn btn-primary btn-scan-files"> Scan files in course </button>')
         $('.ef-directory-header').find('.ef-links-col').before('<span class="ef-occurences-col">Occurrences</span>')
         $('.ef-occurences-col').hide()
-        $('.btn-scan-files').click(clickedButton)
+        $('.btn-scan-files').click(ShowFileUse.clickedButton)
     }
     
     //Starts Scanning the course
