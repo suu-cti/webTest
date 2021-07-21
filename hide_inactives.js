@@ -1,3 +1,7 @@
+var plzdontshow = "GOD I HATE YOU"
+
+
+
 class HideInactives{
     static checkboxID = "hide-inactives-checkbox"
     static originalTableRows = new Array()
@@ -67,6 +71,8 @@ class HideInactives{
 }
 
 new HideInactives()
+
+
 
 
 
