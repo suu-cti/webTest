@@ -4,15 +4,16 @@ class HideInactives{
     
 
     constructor(){
+        this.main()
         //Entry Point. There is a delay here because the table of students loads in after you've made it to the page
-        if(window.location.pathname.includes("courses") && window.location.pathname.includes("users")){
-            var checkExist = setInterval(function(){
-                if(document.getElementsByTagName('table')[0] != undefined){
-                    this.main()
-                    clearInterval(checkExist)
-                }
-            }, 100)
-        }
+        // if(window.location.pathname.includes("courses") && window.location.pathname.includes("users")){
+        //     var checkExist = setInterval(function(){
+        //         if(document.getElementsByTagName('table')[0] != undefined){
+        //             this.main()
+        //             clearInterval(checkExist)
+        //         }
+        //     }, 100)
+        // }
     }
 
     

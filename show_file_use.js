@@ -20,14 +20,15 @@ class ShowFileUse{
     allFilesInCourse = {}
 
     constructor(){
-        if(window.location.pathname.includes('files')){
-            var checkExist = setInterval(function(){
-                if(document.getElementsByClassName('ef-item-row')[0] != undefined){
-                    this.main()
-                    clearInterval(checkExist)
-                }
-            }, 100)
-        }
+        this.main()
+        // if(window.location.pathname.includes('files')){
+        //     var checkExist = setInterval(function(){
+        //         if(document.getElementsByClassName('ef-item-row')[0] != undefined){
+        //             this.main()
+        //             clearInterval(checkExist)
+        //         }
+        //     }, 100)
+        // }
     }
 
     main(){
