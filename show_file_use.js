@@ -1,3 +1,6 @@
+
+
+
 //NOTE: Pages are a thing in Canvas already. Couldn't find a word to describe all of the places we're grabbing info from, so I refer to them as "Pages", which are different from Pages, which are a part of Canvas
 //assignments, pages, modules, etc are all referred to as "Pages"
 
@@ -16,8 +19,8 @@
 
 
 class ShowFileUse{
-    filesUsedInCourse = {}
-    allFilesInCourse = {}
+    static filesUsedInCourse = {}
+    static allFilesInCourse = {}
 
     constructor(){
         if(window.location.pathname.includes('files')){
@@ -71,14 +74,14 @@ class ShowFileUse{
             await ShowFileUse.getContentFromPage(placesToScrapeDirectly[i], url, courseID)
         }
     
-        var date = getDate()
+        var date = ShowFileUse.getDate()
         url = "https://suu.instructure.com/api/v1/" + placesToScrapeWithDateInformation[0][0]  + "?" + 'context_codes[]=course_' + window.location.pathname.split('/')[2] +'&start_date=2011-01-01' + '&end_date=' + date
         await ShowFileUse.getContentFromPage(placesToScrapeWithDateInformation[0], url, courseID)
         
     
         //Grabbing all files in the course regardless of whether or not they're used
         var url = "https://suu.instructure.com/api/v1/courses/" + courseID + '/files'
-        allFilesInCourse = await ShowFileUse.getFilesFromCourse(url, new Array())
+        ShowFileUse.allFilesInCourse = await ShowFileUse.getFilesFromCourse(url, new Array())
     
         await ShowFileUse.handleModules(courseID)
     
@@ -93,11 +96,11 @@ class ShowFileUse{
         //Alright, this function is a little dense because we have to query each of the modules, then query for the content inside of them
         var url = "https://suu.instructure.com/api/v1/courses/" + courseID + '/modules'
     
-        response = await fetch(url)
+        var response = await fetch(url)
         .then(response => response.json())
         .then(async function(data){
             for(var i = 0; i < data.length; i++){
-                innerResponse = await fetch(data[i]['items_url'])
+                var innerResponse = await fetch(data[i]['items_url'])
                 .then(innerResponse => innerResponse.json())
                 .then(data => {
                     for(var x = 0; x < data.length; x++){
@@ -115,9 +118,9 @@ class ShowFileUse{
     //Calls the API to grab every single file from the course regardless of whether or not it is used. Because it's paginated, we have to do this recursively, which is why this is a little gross
     //Gotta keep making the call until there are no more resources to grab
     static async getFilesFromCourse(url, previousResponse){
-        files = new Array()
+        var files = new Array()
         //Calls API using url and page information
-        response = await fetch(url)
+        var response = await fetch(url)
         .then(async function(response) {
             var link = response.headers.get("Link").split(',')[1]
             if(link.includes("next")){
@@ -149,7 +152,7 @@ class ShowFileUse{
         var courseID = window.location.pathname.split('/')[2]
     
         //The API call
-        response = await fetch(url)
+        var response = await fetch(url)
         .then(async function(response){
             var link = response.headers.get("Link").split(',')[1]
             if(link.includes("next")){
@@ -164,7 +167,7 @@ class ShowFileUse{
         .then(data => {
             //Grabs the url to each page and pushes it to the urls array
             for(var i = 0; i < data.length; i++){
-                tempURL = data[i][pageType[1]].split('/')
+                var tempURL = data[i][pageType[1]].split('/')
                 urls.push(pageType[0] + '/' + tempURL[tempURL.length-1])
             }
             for(var i = 0; i < previousResponse.length; i++){
@@ -179,7 +182,7 @@ class ShowFileUse{
     static async getContentFromPage(location, url, courseID){
         //Calls API using url
     
-        response = await fetch(url)
+        var response = await fetch(url)
         .then(async function(response){
             if(response.headers.get("Link") != null){
                 var link = response.headers.get("Link").split(',')[1]
@@ -282,15 +285,15 @@ class ShowFileUse{
     
             //When we declare the dictionary, we don't know the types, so the first time we're adding something to the dictionary, we use = and subsequent times we can use += now that we have a set data type
             //I created a dictionary in a dictionary here because for each file, I want to keep track of multiple pieces of data (Occurences of that file in the course and an array of links showing where the file is used)
-            if(filesUsedInCourse[fileID] != null){
-                filesUsedInCourse[fileID]['occurences'] += 1
-                filesUsedInCourse[fileID]['links'].push(pageURL)
+            if(ShowFileUse.filesUsedInCourse[fileID] != null){
+                ShowFileUse.filesUsedInCourse[fileID]['occurences'] += 1
+                ShowFileUse.filesUsedInCourse[fileID]['links'].push(pageURL)
             }
             else{
-                filesUsedInCourse[fileID] = {}
-                filesUsedInCourse[fileID]['links'] = new Array()
-                filesUsedInCourse[fileID]['occurences'] = 1
-                filesUsedInCourse[fileID]['links'].push(pageURL)
+                ShowFileUse.filesUsedInCourse[fileID] = {}
+                ShowFileUse.filesUsedInCourse[fileID]['links'] = new Array()
+                ShowFileUse.filesUsedInCourse[fileID]['occurences'] = 1
+                ShowFileUse.filesUsedInCourse[fileID]['links'].push(pageURL)
             }
         }
     
@@ -315,9 +318,9 @@ class ShowFileUse{
     //Also downloads the csv of our data
     static compareAllFilesToFilesUsed(){
         //Stores all of the divs so we can insert our data back into the webpage
-        htmlItems = $('.ef-item-row').find('.ef-links-col')
+        var htmlItems = $('.ef-item-row').find('.ef-links-col')
         let csvContent = "File Name, Occurrences, Links\n"
-        for(var i = 0; i < Object.keys(allFilesInCourse).length; i++){
+        for(var i = 0; i < Object.keys(ShowFileUse.allFilesInCourse).length; i++){
             csvContent += ShowFileUse.csvContentFromData(i)
         }
     
@@ -335,14 +338,14 @@ class ShowFileUse{
     //Takes the data we already gathered and puts it in a csv friendly format and returns it as a string
     //Takes in the index of which file we're looking at
     static csvContentFromData(index){
-        if(filesUsedInCourse[allFilesInCourse[index]['id']] != null){
-            var tempString =  allFilesInCourse[index]['display_name'] + ',' + filesUsedInCourse[allFilesInCourse[index]['id']]['occurences'] + ',\"'
+        if(ShowFileUse.filesUsedInCourse[ShowFileUse.allFilesInCourse[index]['id']] != null){
+            var tempString =  ShowFileUse.allFilesInCourse[index]['display_name'] + ',' + ShowFileUse.filesUsedInCourse[ShowFileUse.allFilesInCourse[index]['id']]['occurences'] + ',\"'
             
             //A file can be used in many different places. This will loop through all of those and add those links to our string
             //The if statement is there so I don't insert a newline character if I'm at the last link in the list
-            for(var i = 0; i < filesUsedInCourse[allFilesInCourse[index]['id']]['links'].length; i++){
-                tempString += filesUsedInCourse[allFilesInCourse[index]['id']]['links'][i].replace('/api/v1', '')
-                if(filesUsedInCourse[allFilesInCourse[index]['id']]['links'].length - i > 1){
+            for(var i = 0; i < ShowFileUse.filesUsedInCourse[ShowFileUse.allFilesInCourse[index]['id']]['links'].length; i++){
+                tempString += ShowFileUse.filesUsedInCourse[ShowFileUse.allFilesInCourse[index]['id']]['links'][i].replace('/api/v1', '')
+                if(ShowFileUse.filesUsedInCourse[ShowFileUse.allFilesInCourse[index]['id']]['links'].length - i > 1){
                     tempString +=  '\n'
                 }
             }
@@ -351,7 +354,7 @@ class ShowFileUse{
             return tempString
         }
         else{
-            return allFilesInCourse[index]['display_name'] + ',' + '0\n'
+            return ShowFileUse.allFilesInCourse[index]['display_name'] + ',' + '0\n'
         }
     }
     
@@ -380,4 +383,7 @@ class ShowFileUse{
 }
 
 new ShowFileUse()
+
+
+
 
