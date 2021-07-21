@@ -5,14 +5,14 @@ originalTableRows = new Array()
 if(window.location.pathname.includes("courses") && window.location.pathname.includes("users")){
     var checkExist = setInterval(function(){
         if(document.getElementsByTagName('table')[0] != undefined){
-            main()
+            hide_inactives.js.main()
             clearInterval(checkExist)
         }
     }, 100)
 }
 
 
-function main(){
+static function main(){
     console.log("Entering main")
         $('.v-gutter').prepend('<div id ="inactive-users" style="display: inline-block; width: 100%"> </div>')
         $('#inactive-users').prepend('<span style="font-size: 1.3em;"> Show Inactive Users <input id ="'+ checkboxID +'" type = "checkbox" checked> </input> </span>')
