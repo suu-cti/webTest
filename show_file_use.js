@@ -20,7 +20,7 @@
 if(window.location.pathname.includes('files')){
     var checkExist = setInterval(function(){
         if(document.getElementsByClassName('ef-item-row')[0] != undefined){
-            show_file_use.js.main()
+            show_file_use.main()
             clearInterval(checkExist)
         }
     }, 100)
