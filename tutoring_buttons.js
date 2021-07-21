@@ -12,7 +12,7 @@ class TutoringButtons{
         var title = documentTitle[0];
         var buttonText = documentTitle[0] + "-" + documentTitle[1]
         //buttonText = classDictionary[title][1] + buttonText + "?"
-        if(this.classDictionary[title]){
+        if(classDictionary[title]){
             $('.Sidebar__TodoListContainer').before('<div id="' + this.tutoringID + '" style="background-color: #F4F4F4; border: 2px solid #E7E7E7; padding-bottom: 0.5%"> </div>')
             $('#'+this.tutoringID).append('<p style = "border-bottom: 2px solid #E7E7E7; background-color: #E7E7E7; font-size: 1.5em; text-align: center; margin-bottom: 4%; " >' + buttonText + ' Help</p>')
             for(var i = 0; i < classDictionary[title].length; i++){
