@@ -39,8 +39,8 @@ class AssignmentSwitcher{
     
     //Adds the buttons used to switch between previous and next assignments as well as the dropdown button
     addNavButtons(){
-        previousUrl = "speed_grader?assignment_id=" + this.previousAssignment
-        nextUrl = "speed_grader?assignment_id=" + this.nextAssignment
+        var previousUrl = "speed_grader?assignment_id=" + this.previousAssignment
+        var nextUrl = "speed_grader?assignment_id=" + this.nextAssignment
         $('<button id="prev-assignment-button" type="button" style = "background-color: hsla(360, 100%, 100%, 0); border: none; margin-right: 1%;" aria-hidden="true" onclick = location.href="'  + previousUrl + '"  ><i class="icon-arrow-left prev" style="color: white"></i></input>').insertBefore('.assignmentDetails')
         $('<button id="assignment-dropdown-button" type="button" style = "background-color: hsla(360, 100%, 100%, 0); border: none; margin-left: 1%;" aria-hidden="true" onclick = "this.dropdownClicked()"><i class="icon-mini-arrow-down" style="color: white"></i></input>').insertAfter('.assignmentDetails')
         $('<button id="next-assignment-button" type="button" style = "background-color: hsla(360, 100%, 100%, 0); border: none; margin-left: 1%;" aria-hidden="true" onclick = location.href="'  + nextUrl + '" ><i class="icon-arrow-right prev" style="color: white"></i></input>').insertAfter('#assignment-dropdown-button')
@@ -50,21 +50,21 @@ class AssignmentSwitcher{
     //Alright, this one is mega nasty, but it's not so bad if you take it line by line. The main purpose of the function is to query the Canvas API to get a list of all assignments in a course and add buttons to take
     //you to each cooresponding speedgrader page
     createAssignmentButtons(){
-        courseID = window.location.pathname.split("/")[2]
-        url = "https://suu.instructure.com/api/v1/courses/" + courseID + "/assignments"
-        currentassignmentID = window.location.search.split("=")[1].split("&")[0]
+        var courseID = window.location.pathname.split("/")[2]
+        var url = "https://suu.instructure.com/api/v1/courses/" + courseID + "/assignments"
+        var currentassignmentID = window.location.search.split("=")[1].split("&")[0]
         $('.assignmentDetails').append('<div id = "'+ this.classesDiv + '" style = "border: 2px solid black; border-radius: 3px; position: absolute; display: inline-block; top: 50px;  min-height: 100px; width: 220px; max-height: 20%; z-index: 10; overflow: auto;"</div>')
         
         //The API call
-        response = fetch(url, {order_by: "due_at"})
+        var response = fetch(url, {order_by: "due_at"})
         .then(response => response.json())
         .then(data => {
             //TODO: This is super chonky. See if you can split some stuff up or something
-            assignments = this.getAssignmentIDs(data)
-            gradedCheckMarkStatus = "    "
+            var assignments = this.getAssignmentIDs(data)
+            var gradedCheckMarkStatus = "    "
             for(var i = 0; i < Object.keys(assignments).length; i++){
-                linkUrl = "speed_grader?assignment_id=" + assignments[i]['id']
-                buttonName = assignments[i]['name']
+                var linkUrl = "speed_grader?assignment_id=" + assignments[i]['id']
+                var buttonName = assignments[i]['name']
                 if(assignments[i]['id'] == currentassignmentID){
                     this.setArrowButtonAttrib(i, assignments)
                 }
@@ -90,8 +90,8 @@ class AssignmentSwitcher{
     
     //Returns a dictionary of assignments considered "valid" (Only published assignments)
     getAssignmentIDs(data){
-        assignments = {}
-        index = 0
+        var assignments = {}
+        var index = 0
         for(var i = 0; i < Object.keys(data).length; i++){
             if(data[i]['published']){
                 assignments[index] = data[i]
