@@ -1,13 +1,6 @@
 //Code is used to add assignment switching controls to Speed Grader
 //Written by Bo Stevens (06/08/2021)
 
-
-//ENTRY POINT
-if(window.location.pathname.includes("gradebook")){
-    new AssignmentSwitcher()
-
-}
-
 class AssignmentSwitcher{
     classesDiv = "classesDiv"
     charLimit = 25
@@ -124,5 +117,11 @@ class AssignmentSwitcher{
             this.nextAssignment = assignments[0]['id']
         }
     }
+}
+
+//ENTRY POINT
+if(window.location.pathname.includes("gradebook")){
+    new AssignmentSwitcher()
+
 }
 
