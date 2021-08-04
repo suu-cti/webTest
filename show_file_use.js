@@ -44,8 +44,6 @@ class ShowFileUse{
     //Starts Scanning the course
     //Only happens after the user clicks a button on the Files page. Scanning is pretty intensive, so I wanted to make sure only to do it when the user wanted to
     static async clickedButton(){
-        console.log("He clik")
-    
         //Canvas stores a lot of these things differently, so I'm keeping multiple arrays for each unique way I have to handle these guys
         //Each "Page" has a different attribute that stores the HTMl I'm trying to scrape, so I specified the "Page" at the first index and the attribute we want to grab at the second
         //Make sure whateve the equivalent to id is always at the end because that's how the code will try to access it later
@@ -53,6 +51,9 @@ class ShowFileUse{
         var placesToScrapeViaURL = [['pages','html_url']]
         var placesToScrapeWithDateInformation = [['announcements','message','id']]
     
+
+        //Creates an Alert once someone has pressed the button to let them know the task is being worked on
+        window.alert("Obtaining file usage report \n Please wait up to 5 minutes for the process to complete")
     
         //url to call the API from
         var courseID = window.location.pathname.split('/')[2]
