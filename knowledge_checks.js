@@ -17,7 +17,6 @@ class ParentQuestion{
     green = ""
     red = ""
     constructor(questionData){
-        console.log("Creating")
         this.questionData = questionData
 
         $(questionData).prepend('<div class = "checkbox"> <p>✓</p> </div>')
@@ -142,26 +141,42 @@ class MultipleChoiceQuestion extends ParentQuestion{
         $(element).find('.text').css('border-top','hsla(0, 0%, 0%, 0.25) 1px solid')
         $(element).find('.text').css('margin-bottom','4px')
         $(element).find('.text').css('margin-top','4px')
-        $(element).find('.text').on('mousedown',{parent: this, element: element}, this.onClick)
+        $(element).find('.text').find('span').prepend('<input type="checkbox" style="margin-right: 2.5%;">')
+
+        var parent = this
+
+        $(element).find('.text').on('change',function(){
+            //,{parent: this, element: element}, 
+            console.log("Clicked")
+            parent.onClick(element)
+        })
+
+        $(element).find('.text').keydown(function(e){
+            var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+            if(key == 13){
+                $(element).find('.text input').prop('checked', !$(element).find('.text input').prop('checked'))
+                parent.onClick(element)
+            }
+        })
     }
 
     //Question Behavior on Click
-    onClick(event){
-        if($(event.data.element).attr('data-answer') != null){
-            $(event.data.element).find('.text').css('color',event.data.parent.green)
-            event.data.parent.questionAnsweredCorrect()
-            if(! $(event.data.element).find('.feedback').text().includes("N/A")){
-                $(event.data.element).find('.feedback').show(200)
+    onClick(element){
+        if($(element).attr('data-answer') != null){
+            $(element).find('.text').css('color',this.green)
+            this.questionAnsweredCorrect()
+            if(! $(element).find('.feedback').text().includes("N/A")){
+                $(element).find('.feedback').show(200)
             }
         }
         else{
-            if(!$(event.data.element).find('.feedback').is(":hidden")){
-                $(event.data.element).find('.feedback').hide(200)
-                $(event.data.element).find('.text').css('color','black')
+            if(!$(element).find('.feedback').is(":hidden")){
+                $(element).find('.feedback').hide(200)
+                $(element).find('.text').css('color','black')
             }
             else{
-                $(event.data.element).find('.feedback').show(200)
-                $(event.data.element).find('.text').css('color',event.data.parent.red)
+                $(element).find('.feedback').show(200)
+                $(element).find('.text').css('color',this.red)
             }
             
         }
@@ -177,6 +192,7 @@ class SelectAllCorrect extends ParentQuestion{
     }
 
     questionFromHTML(element){
+        console.log("Running")
         element.find('.feedback').css('color','grey')
         element.find('.feedback').css('margin-left','10px')
         element.find('.feedback').hide()
@@ -187,30 +203,43 @@ class SelectAllCorrect extends ParentQuestion{
         $(element).find('.text').css('margin-bottom','4px')
         $(element).find('.text').css('margin-top','4px')
         $(element).find('.text').css('border-top','hsla(0, 0%, 0%, 0.25) 1px solid')
+        $(element).find('.text').find('span').prepend('<input type="checkbox" style="margin-right: 2.5%;">')
 
-        $(element).find('.text').on('mousedown',{element: element, parent: this}, this.onClick)
+        var parent = this
+
+        $(element).find('.text').on('change',function(){
+            parent.onClick(element)
+        })
+
+        $(element).find('.text').keydown(function(e){
+            var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+            if(key == 13){
+                $(element).find('.text input').prop('checked', !$(element).find('.text input').prop('checked'))
+                parent.onClick(element)
+            }
+        })
     }
 
-    onClick(event){
-        if(event.data.element.attr('data-answer') != null){
-            $(event.data.element).css('color','green')
-            event.data.parent.questionsAnswered += 1
-            if(event.data.parent.questionsAnswered >= event.data.parent.numAnswers){
-                event.data.parent.questionAnsweredCorrect()
+    onClick(element){
+        if(element.attr('data-answer') != null){
+            $(element).css('color','green')
+            this.questionsAnswered += 1
+            if(this.questionsAnswered >= this.numAnswers){
+                this.questionAnsweredCorrect()
             }
 
-            if(! $(event.data.element).find('.feedback').text().includes("N/A")){
-                $(event.data.element).find('.feedback').show(200)
+            if(! $(element).find('.feedback').text().includes("N/A")){
+                $(element).find('.feedback').show(200)
             }
         }
         else{
-            if($(event.data.element).find('.feedback').is(":hidden")){
-                $(event.data.element).find('.text').css('color','red')
-                $(event.data.element).find('.feedback').show(200)
+            if($(element).find('.feedback').is(":hidden")){
+                $(element).find('.text').css('color','red')
+                $(element).find('.feedback').show(200)
             }
             else{
-                $(event.data.element).find('.text').css('color','black')
-                $(event.data.element).find('.feedback').hide(200)
+                $(element).find('.text').css('color','black')
+                $(element).find('.feedback').hide(200)
             }
         }
     }
@@ -381,8 +410,6 @@ class EquationQuestion extends ParentQuestion{
         this.feedback.css('color','grey')
         this.feedback.css('margin-left','10px')
         this.feedback.remove()
-        console.log($(element))
-        console.log($(element).find('.acceptablerange').html())
         this.correctAnswerThreshold = parseFloat($(element).find('.acceptablerange').html())
         this.decimalPlacesToRoundAnswer = parseFloat($(element).find('.decimalplaces').html())
         $(element).find('.options').find('.acceptablerange').remove()

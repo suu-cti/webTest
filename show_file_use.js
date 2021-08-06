@@ -34,7 +34,6 @@ class ShowFileUse{
     }
 
     static main(){
-        console.log("No I'm Entering my main function poop man")
         $('.ef-actions').prepend('<button class="btn btn-primary btn-scan-files"> Scan files in course </button>')
         $('.ef-directory-header').find('.ef-links-col').before('<span class="ef-occurences-col">Occurrences</span>')
         $('.ef-occurences-col').hide()
@@ -53,7 +52,7 @@ class ShowFileUse{
     
 
         //Creates an Alert once someone has pressed the button to let them know the task is being worked on
-        window.alert("Obtaining file usage report \n Please wait up to 5 minutes for the process to complete")
+        window.alert("Obtaining file usage report \n \nPlease wait up to 5 minutes for the process to complete...")
     
         //url to call the API from
         var courseID = window.location.pathname.split('/')[2]
@@ -237,9 +236,7 @@ class ShowFileUse{
     //Method essentially just reformats the url to a format that will take you to the correct page when pasted into a browser
     static removeExtraLinkContent(url, courseID){
         if(url.includes('announcements')){
-            console.log(url)
             var newURL = url.slice(0,url.indexOf('announcements')) + 'courses/' + courseID + '/discussion_topics'
-            console.log(newURL)
             return newURL
     
         }
@@ -327,7 +324,6 @@ class ShowFileUse{
     
     
         //Handles downloading the csv
-        console.log(csvContent)
         var encodedUri = encodeURI(csvContent)
         var link = document.createElement('a')
         link.href = "data:text/csv;charset=utf-8," + encodedUri

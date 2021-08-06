@@ -24,34 +24,40 @@ class AssignmentSwitcher{
         $('#'+this.classesDiv).css("visibility", "hidden")
     }
     
-    
     //Shows our assignment buttons when clicking on the dropdown button the first time, and hiding the second
-    dropdownClicked(){
-        if(this.showingAssignments){
-            this.showingAssignments = false
-            $('#'+this.classesDiv).css("visibility", "hidden")
+    dropdownClicked(event){
+        if(event.data.parent.showingAssignments){
+            event.data.parent.showingAssignments = false
+            $('#'+event.data.parent.classesDiv).css("visibility", "hidden")
         }
         else{
-            this.showingAssignments = true
-            $('#'+this.classesDiv).css("visibility", "visible")
+            event.data.parent.showingAssignments = true
+            $('#'+event.data.parent.classesDiv).css("visibility", "visible")
         }
     }
+
     
     //Adds the buttons used to switch between previous and next assignments as well as the dropdown button
     addNavButtons(){
         var previousUrl = "speed_grader?assignment_id=" + this.previousAssignment
         var nextUrl = "speed_grader?assignment_id=" + this.nextAssignment
         $('<button id="prev-assignment-button" type="button" style = "background-color: hsla(360, 100%, 100%, 0); border: none; margin-right: 1%;" aria-hidden="true" onclick = location.href="'  + previousUrl + '"  ><i class="icon-arrow-left prev" style="color: white"></i></input>').insertBefore('.assignmentDetails')
-        $('<button id="assignment-dropdown-button" type="button" style = "background-color: hsla(360, 100%, 100%, 0); border: none; margin-left: 1%;" aria-hidden="true" onclick = "this.dropdownClicked()"><i class="icon-mini-arrow-down" style="color: white"></i></input>').insertAfter('.assignmentDetails')
+
+        //This one is split in two parts because we need to be able to reference this, which can't be done in a string
+        $('<button id="assignment-dropdown-button" type="button" style = "background-color: hsla(360, 100%, 100%, 0); border: none; margin-left: 1%;" aria-hidden="true"><i class="icon-mini-arrow-down" style="color: white"></i></input>').insertAfter('.assignmentDetails')
+        $('#assignment-dropdown-button').click({parent: this}, this.dropdownClicked)
+
         $('<button id="next-assignment-button" type="button" style = "background-color: hsla(360, 100%, 100%, 0); border: none; margin-left: 1%;" aria-hidden="true" onclick = location.href="'  + nextUrl + '" ><i class="icon-arrow-right prev" style="color: white"></i></input>').insertAfter('#assignment-dropdown-button')
         $(".assignmentDetails").css("border", "none")
     }
+
+
     
     //Alright, this one is mega nasty, but it's not so bad if you take it line by line. The main purpose of the function is to query the Canvas API to get a list of all assignments in a course and add buttons to take
     //you to each cooresponding speedgrader page
     createAssignmentButtons(){
         var courseID = window.location.pathname.split("/")[2]
-        var url = "https://suu.instructure.com/api/v1/courses/" + courseID + "/assignments"
+        var url = "https://suu.beta.instructure.com/api/v1/courses/" + courseID + "/assignments"
         var currentassignmentID = window.location.search.split("=")[1].split("&")[0]
         $('.assignmentDetails').append('<div id = "'+ this.classesDiv + '" style = "border: 2px solid black; border-radius: 3px; position: absolute; display: inline-block; top: 50px;  min-height: 100px; width: 220px; max-height: 20%; z-index: 10; overflow: auto;"</div>')
         
