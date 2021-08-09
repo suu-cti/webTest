@@ -25,6 +25,7 @@ class HideInactives{
     
     //Behavior for when our checkbox is clicked
     static boxClicked(){
+        console.log("Clicked")
         var checked = $('#'+HideInactives.checkboxID).is(":checked")
         if(checked){
             HideInactives.showEntries()
