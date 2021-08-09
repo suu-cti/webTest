@@ -57,7 +57,7 @@ class AssignmentSwitcher{
     //you to each cooresponding speedgrader page
     createAssignmentButtons(){
         var courseID = window.location.pathname.split("/")[2]
-        var url = "https://suu.beta.instructure.com/api/v1/courses/" + courseID + "/assignments"
+        var url = "https://suu.instructure.com/api/v1/courses/" + courseID + "/assignments"
         var currentassignmentID = window.location.search.split("=")[1].split("&")[0]
         $('.assignmentDetails').append('<div id = "'+ this.classesDiv + '" style = "border: 2px solid black; border-radius: 3px; position: absolute; display: inline-block; top: 50px;  min-height: 100px; width: 220px; max-height: 20%; z-index: 10; overflow: auto;"</div>')
         

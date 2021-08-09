@@ -1,21 +1,21 @@
 
-/*
+
 // JavaScript Document
 var script = document.createElement("script");
 script.type = 'text/javascript';
-script.src = 'https://cdn.jsdelivr.net/gh/suu-otl/webTest@b355e8d50ff1e93512b7b9c32e1169122735f372/script_manager.js';
+script.src = 'https://cdn.jsdelivr.net/gh/suu-otl/webTest@bfcfbf73c887d7a0c1e2786672de860b3261b1b5/script_manager.js';
 document.head.appendChild(script);
-*/
+
 
 
 //Calls all of the other scripts
 // console.log("Script manager working")
-var scripts = [ 'assignment_switcher.js', 'buttons.js', 'hide_elements.js', 'knowledge_checks.js',  'third_party_scripts.js', 'tutoring_buttons.js']
-for(var i = 0; i < scripts.length; i++){
-	var script = document.createElement("script");
-	script.src = 'https://www.suu.edu/otl/_canvas-files/' + scripts[i];
-	document.head.appendChild(script);
-}
+// var scripts = [ 'assignment_switcher.js', 'buttons.js', 'hide_elements.js', 'knowledge_checks.js',  'third_party_scripts.js', 'tutoring_buttons.js']
+// for(var i = 0; i < scripts.length; i++){
+// 	var script = document.createElement("script");
+// 	script.src = 'https://www.suu.edu/otl/_canvas-files/' + scripts[i];
+// 	document.head.appendChild(script);
+// }
 
 
 

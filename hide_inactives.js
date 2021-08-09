@@ -1,7 +1,3 @@
-var plzdontshow = "GOD I HATE YOU"
-
-
-
 class HideInactives{
     static checkboxID = "hide-inactives-checkbox"
     static originalTableRows = new Array()
@@ -22,7 +18,6 @@ class HideInactives{
     
     
     static main(){
-        console.log("Entering main")
         $('.v-gutter').prepend('<div id ="inactive-users" style="display: inline-block; width: 100%"> </div>')
         $('#inactive-users').prepend('<span style="font-size: 1.3em;"> Show Inactive Users <input id ="'+ HideInactives.checkboxID +'" type = "checkbox" checked> </input> </span>')
         $('#'+HideInactives.checkboxID).click(HideInactives.boxClicked)
@@ -71,8 +66,3 @@ class HideInactives{
 }
 
 new HideInactives()
-
-
-
-
-
