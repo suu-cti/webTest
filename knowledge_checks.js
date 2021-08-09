@@ -141,7 +141,7 @@ class MultipleChoiceQuestion extends ParentQuestion{
         $(element).find('.text').css('border-top','hsla(0, 0%, 0%, 0.25) 1px solid')
         $(element).find('.text').css('margin-bottom','4px')
         $(element).find('.text').css('margin-top','4px')
-        $(element).find('.text').find('span').prepend('<input type="checkbox" style="margin-right: 2.5%;">')
+        $(element).find('.text').prepend('<input type="checkbox" style="margin-right: 2.5%;">')
 
         var parent = this
 
