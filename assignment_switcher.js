@@ -11,7 +11,8 @@ class AssignmentSwitcher{
     
 
     constructor(){
-        this.createAssignmentButtons()
+        var url = "https://suu.beta.instructure.com/api/v1/courses/" + courseID + "/assignments"
+        this.createAssignmentButtons(url)
         $(document).click(this.hideButtons)
     }
     
@@ -55,43 +56,110 @@ class AssignmentSwitcher{
     
     //Alright, this one is mega nasty, but it's not so bad if you take it line by line. The main purpose of the function is to query the Canvas API to get a list of all assignments in a course and add buttons to take
     //you to each cooresponding speedgrader page
-    createAssignmentButtons(){
+    createAssignmentButtons(url, previousResponse){
         var courseID = window.location.pathname.split("/")[2]
-        var url = "https://suu.instructure.com/api/v1/courses/" + courseID + "/assignments"
+        
         var currentassignmentID = window.location.search.split("=")[1].split("&")[0]
         $('.assignmentDetails').append('<div id = "'+ this.classesDiv + '" style = "border: 2px solid black; border-radius: 3px; position: absolute; display: inline-block; top: 50px;  min-height: 100px; width: 220px; max-height: 20%; z-index: 10; overflow: auto;"</div>')
         
         //The API call
-        var response = fetch(url, {order_by: "due_at"})
-        .then(response => response.json())
-        .then(data => {
-            //TODO: This is super chonky. See if you can split some stuff up or something
-            var assignments = this.getAssignmentIDs(data)
-            var gradedCheckMarkStatus = "    "
-            for(var i = 0; i < Object.keys(assignments).length; i++){
-                var linkUrl = "speed_grader?assignment_id=" + assignments[i]['id']
-                var buttonName = assignments[i]['name']
-                if(assignments[i]['id'] == currentassignmentID){
-                    this.setArrowButtonAttrib(i, assignments)
+                    // var response = fetch(url, {order_by: "due_at"})
+                    // .then(response => response.json())
+                    // .then(data => {
+                    //     //TODO: This is super chonky. See if you can split some stuff up or something
+                    //     var assignments = this.getAssignmentIDs(data)
+                    //     var gradedCheckMarkStatus = "    "
+                    //     for(var i = 0; i < Object.keys(assignments).length; i++){
+                    //         var linkUrl = "speed_grader?assignment_id=" + assignments[i]['id']
+                    //         var buttonName = assignments[i]['name']
+                    //         if(assignments[i]['id'] == currentassignmentID){
+                    //             this.setArrowButtonAttrib(i, assignments)
+                    //         }
+                    //         if(assignments[i]['needs_grading_count'] == 0){
+                    //             gradedCheckMarkStatus = "✓ "
+                    //         }
+                    //         if(buttonName.length >= this.charLimit){
+                    //             buttonName = buttonName.substring(0,this.charLimit) + "..."
+                    //         }
+                    //         $('#'+this.classesDiv).append('<input type="button" style = "width: 100%; height: 35px; background-color: white; border-top: none; border-left: none; border-right: none; border-width: 2px; text-align: left;" onclick = location.href="'  + linkUrl  + '" value="' + gradedCheckMarkStatus + buttonName + '" </input> <br>')
+                            
+                    //     }
+                    //     //Adds hover component to buttons
+                    //     $('#' + this.classesDiv + ' input').hover(function(){
+                    //         $(this).css("background-color", '#f2f2f2')
+                    //     },function(){
+                    //         $(this).css("background-color","white")
+                    //     })
+                    //     this.addNavButtons()
+                    // })
+
+        var response = await fetch(url, {order_by: "due_at"})
+        .then(async function(response) {
+            var link = response.headers.get("Link").split(',')[1]
+            if(link.includes("next")){
+                var nextUrl = ""
+                for(var i = 1; link[i] != '>' && i < link.length; i++ ){
+                    nextUrl += link[i]
                 }
-                if(assignments[i]['needs_grading_count'] == 0){
-                    gradedCheckMarkStatus = "✓ "
-                }
-                if(buttonName.length >= this.charLimit){
-                    buttonName = buttonName.substring(0,this.charLimit) + "..."
-                }
-                $('#'+this.classesDiv).append('<input type="button" style = "width: 100%; height: 35px; background-color: white; border-top: none; border-left: none; border-right: none; border-width: 2px; text-align: left;" onclick = location.href="'  + linkUrl  + '" value="' + gradedCheckMarkStatus + buttonName + '" </input> <br>')
-                
+                previousResponse = await ShowFileUse.callCanvasAPI(nextUrl, previousResponse)
             }
-            //Adds hover component to buttons
-            $('#' + this.classesDiv + ' input').hover(function(){
-                $(this).css("background-color", '#f2f2f2')
-            },function(){
-                $(this).css("background-color","white")
-            })
-            this.addNavButtons()
+            return response.json()
+        })
+
+        .then(data => {
+            files = data
+            for(var i = 0; i < previousResponse.length; i++){
+                var assignments = this.getAssignmentIDs(data)
+                var gradedCheckMarkStatus = "    "
+                for(var i = 0; i < Object.keys(assignments).length; i++){
+                    var linkUrl = "speed_grader?assignment_id=" + assignments[i]['id']
+                    var buttonName = assignments[i]['name']
+                    if(assignments[i]['id'] == currentassignmentID){
+                        this.setArrowButtonAttrib(i, assignments)
+                    }
+                    if(assignments[i]['needs_grading_count'] == 0){
+                        gradedCheckMarkStatus = "✓ "
+                    }
+                    if(buttonName.length >= this.charLimit){
+                        buttonName = buttonName.substring(0,this.charLimit) + "..."
+                    }
+                    $('#'+this.classesDiv).append('<input type="button" style = "width: 100%; height: 35px; background-color: white; border-top: none; border-left: none; border-right: none; border-width: 2px; text-align: left;" onclick = location.href="'  + linkUrl  + '" value="' + gradedCheckMarkStatus + buttonName + '" </input> <br>')
+                    
+                }
+                //Adds hover component to buttons
+                $('#' + this.classesDiv + ' input').hover(function(){
+                    $(this).css("background-color", '#f2f2f2')
+                },function(){
+                    $(this).css("background-color","white")
+                })
+                this.addNavButtons()
+            }
         })
         $('#'+this.classesDiv).css("visibility", "hidden")
+    }
+
+    static async callCanvasAPI(url, previousResponse){
+        var files = new Array()
+        //Calls API using url and page information
+        var response = await fetch(url)
+        .then(async function(response) {
+            var link = response.headers.get("Link").split(',')[1]
+            if(link.includes("next")){
+                var nextUrl = ""
+                for(var i = 1; link[i] != '>' && i < link.length; i++ ){
+                    nextUrl += link[i]
+                }
+                previousResponse = await ShowFileUse.callCanvasAPI(nextUrl, previousResponse)
+            }
+            return response.json()
+        })
+        .then(data => {
+            files = data
+            for(var i = 0; i < previousResponse.length; i++){
+                files.push(previousResponse[i])
+            }
+        })
+        return files
     }
     
     //Returns a dictionary of assignments considered "valid" (Only published assignments)
